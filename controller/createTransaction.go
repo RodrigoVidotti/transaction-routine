@@ -1,24 +1,35 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
+	"transactionroutine/db"
+	"transactionroutine/model"
 
 	"github.com/labstack/echo/v4"
 )
 
-type transaction struct {
-	AccountId       string `json:"account_id"`
-	OperationTypeId string `json:"operation_type_id"`
-	Amount          string `json:"amount"`
-}
-
 func CreateTransaction(c echo.Context) error {
-	t := new(transaction)
+	t := new(model.Transaction)
 	if err := c.Bind(t); err != nil {
 		return err
 	}
 
-	resp := fmt.Sprintf("transaction created | account_id: %s | operation_type_id: %s | amount: %s", t.AccountId, t.OperationTypeId, t.Amount)
-	return c.JSON(http.StatusCreated, resp)
+	conn := db.GetConn()
+	resp, err := conn.Exec(`
+		INSERT INTO Transaction
+		(account_id, operation_type_id, amount)
+		VALUES
+		(?,?,?)`,
+		t.AccountId, t.OperationTypeId, t.Amount)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	transactionID, err := resp.LastInsertId()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, transactionID)
 }

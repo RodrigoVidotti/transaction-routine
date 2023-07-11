@@ -1,23 +1,35 @@
 package account
 
 import (
-	"fmt"
 	"net/http"
+	"transactionroutine/db"
+	"transactionroutine/model"
 
 	"github.com/labstack/echo/v4"
 )
 
-type Account struct {
-	DocumentNumber string `json:"document_number"`
-}
-
 func CreateAccount(c echo.Context) error {
-	a := new(Account)
+	a := new(model.Account)
 	if err := c.Bind(a); err != nil {
-		return err
+		panic(err.Error())
 	}
 
-	resp := fmt.Sprintf("account created | document_number: %s", a.DocumentNumber)
+	conn := db.GetConn()
+	resp, err := conn.Exec(`
+		INSERT INTO Account
+		(document_number)
+		VALUES
+		(?)`,
+		a.DocumentNumber)
 
-	return c.JSON(http.StatusCreated, resp)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	accountID, err := resp.LastInsertId()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, accountID)
 }
