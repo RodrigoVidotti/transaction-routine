@@ -4,16 +4,18 @@ import (
 	"database/sql"
 	"fmt"
 	"transactionroutine/configs"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var db *sql.DB
 
 func Init() {
-	db, err := sql.Open(configs.GetDBType(), configs.GetConnString())
+	var err error
+	db, err = sql.Open(configs.GetDBType(), configs.GetConnString())
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -23,6 +25,6 @@ func Init() {
 	fmt.Println("db connected")
 }
 
-func CreateConn() *sql.DB {
+func GetConn() *sql.DB {
 	return db
 }

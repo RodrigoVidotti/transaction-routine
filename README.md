@@ -1,5 +1,9 @@
 # Welcome
 
+## docker
+
+`docker run --name transactionRoutine-mysql-docker -e MYSQL_ROOT_PASSWORD=password -d mysql:8`
+
 ## run app
 
 `go run main.go`
@@ -20,6 +24,6 @@ POST /transactions
 ```sh
 curl -X POST  \
 -H 'Content-Type: application/json' \
--d '{"account_id":"1","operation_type_id":"2","amount":"3"}' \
+-d '{"account_id":"5","operation_type_id":"1","amount":"-1223.23"}' \
 localhost:8080/transaction
 ```

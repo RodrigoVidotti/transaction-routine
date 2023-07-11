@@ -3,11 +3,11 @@ package configs
 import "fmt"
 
 const (
-	DBHost = "localhost"
+	DBHost = "172.17.0.2"
 	DBPort = "3306"
 	DBUser = "root"
-	DBPass = "123abc"
-	DBName = "mysql"
+	DBPass = "password"
+	DBName = "transaction_routine"
 	DBType = "mysql"
 )
 
