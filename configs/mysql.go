@@ -3,7 +3,7 @@ package configs
 import "fmt"
 
 const (
-	DBHost = "172.17.0.2"
+	DBHost = "db"
 	DBPort = "3306"
 	DBUser = "root"
 	DBPass = "password"

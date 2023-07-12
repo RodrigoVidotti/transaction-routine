@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"time"
 	"transactionroutine/configs"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -17,10 +18,9 @@ func Init() {
 		panic(err.Error())
 	}
 
-	err = db.Ping()
-	if err != nil {
+	for db.Ping() != nil {
 		fmt.Println("db connection unavailable")
-		panic(err.Error())
+		time.Sleep(2 * time.Second)
 	}
 	fmt.Println("db connected")
 }

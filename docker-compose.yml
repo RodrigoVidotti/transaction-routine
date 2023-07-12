@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: transaction_routine
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+  app:
+    container_name: app
+    build:
+      context: .
+    expose:
+      - "8080"
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+volumes:
+  mysql_data:
