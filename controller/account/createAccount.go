@@ -1,6 +1,7 @@
 package account
 
 import (
+	"database/sql"
 	"net/http"
 	"transactionroutine/db"
 	"transactionroutine/model"
@@ -15,6 +16,16 @@ func CreateAccount(c echo.Context) error {
 	}
 
 	conn := db.GetConn()
+
+	accountID, err := InsertAccount(conn, a)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, accountID)
+}
+
+func InsertAccount(conn *sql.DB, a *model.Account) (int64, error) {
 	resp, err := conn.Exec(`
 		INSERT INTO Account
 		(document_number)
@@ -28,8 +39,8 @@ func CreateAccount(c echo.Context) error {
 
 	accountID, err := resp.LastInsertId()
 	if err != nil {
-		panic(err.Error())
+		return 0, err
 	}
 
-	return c.JSON(http.StatusCreated, accountID)
+	return accountID, err
 }

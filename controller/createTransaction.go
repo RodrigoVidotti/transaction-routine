@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"net/http"
 	"transactionroutine/db"
 	"transactionroutine/model"
@@ -15,6 +16,16 @@ func CreateTransaction(c echo.Context) error {
 	}
 
 	conn := db.GetConn()
+
+	transactionID, err := InsertTransaction(conn, t)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, transactionID)
+}
+
+func InsertTransaction(conn *sql.DB, t *model.Transaction) (int64, error) {
 	resp, err := conn.Exec(`
 		INSERT INTO Transaction
 		(account_id, operation_type_id, amount)
@@ -28,8 +39,8 @@ func CreateTransaction(c echo.Context) error {
 
 	transactionID, err := resp.LastInsertId()
 	if err != nil {
-		panic(err.Error())
+		return 0, err
 	}
 
-	return c.JSON(http.StatusCreated, transactionID)
+	return transactionID, err
 }
