@@ -3,6 +3,7 @@ package account
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 	"transactionroutine/db"
 	"transactionroutine/model"
 
@@ -10,11 +11,16 @@ import (
 )
 
 func GetAccount(c echo.Context) error {
+	var err error
+
 	a := new(model.Account)
-	a.AccountID = c.Param("accountId")
+	a.AccountID, err = strconv.Atoi(c.Param("accountId"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Account not found")
+	}
 
 	conn := db.GetConn()
-	err := FindAccount(conn, a)
+	err = FindAccount(conn, a)
 
 	if err != nil {
 		return c.JSON(http.StatusNotFound, "Account not found")
@@ -22,7 +28,7 @@ func GetAccount(c echo.Context) error {
 
 	return c.JSON(
 		http.StatusOK,
-		map[string]string{
+		map[string]int{
 			"account_id":      a.AccountID,
 			"document_number": a.DocumentNumber})
 }

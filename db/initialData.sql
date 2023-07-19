@@ -12,10 +12,10 @@ CREATE TABLE OperationType (
     name VARCHAR(20)
 );
 
-INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('PAGAMENTO');
-INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('SAQUE');
-INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('COMPRA PARCELADA');
 INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('COMPRA A VISTA');
+INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('COMPRA PARCELADA');
+INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('SAQUE');
+INSERT INTO `transaction_routine`.`OperationType` (`name`) VALUES ('PAGAMENTO');
 
 CREATE TABLE Transaction (
 	transaction_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

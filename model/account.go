@@ -1,6 +1,6 @@
 package model
 
 type Account struct {
-	AccountID      string `json:"account_id"`
-	DocumentNumber string `json:"document_number"`
+	AccountID      int `json:"account_id"`
+	DocumentNumber int `json:"document_number"`
 }
